@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Narrowly-scoped lint suppressions. Deliberately not a baseline file: a
+    baseline would swallow whatever else happens to be failing the day it is
+    regenerated, including the OldTargetApi reminder we want to keep seeing.
+-->
+<lint>
+    <!--
+        False positive. Lint reasons that a -v26 qualifier is redundant when
+        minSdk is already 26 — but take the advice and rename the folder to
+        mipmap-anydpi and AAPT2 stops resolving @mipmap/ic_launcher entirely,
+        failing resource linking. Adaptive icons need the qualifier. Verified
+        by trying it (2026-07-28).
+    -->
+    <issue id="ObsoleteSdkInt">
+        <ignore path="src/main/res/mipmap-anydpi-v26" />
+    </issue>
+
+    <!--
+        Working as intended: predictive back is an API 33+ opt-in, and the
+        attribute is simply ignored below that. Scoped by message so any other
+        genuinely-unused attribute still gets flagged.
+    -->
+    <issue id="UnusedAttribute">
+        <ignore regexp="enableOnBackInvokedCallback" />
+    </issue>
+</lint>

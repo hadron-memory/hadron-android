@@ -96,4 +96,10 @@ upload key or Play App Signing, never from this repo. Bump `versionCode` (and
 - **`mipmap-anydpi-v26` must keep the `-v26`** even though minSdk is 26 and lint
   says to merge it into `mipmap-anydpi`. Take the suggestion and AAPT2 stops
   resolving `@mipmap/ic_launcher` at all — resource linking fails. The
-  `ObsoleteSdkInt` warning here is a known false positive; leave it.
+  `ObsoleteSdkInt` warning here is a known false positive, suppressed by path in
+  `app/lint.xml`.
+- **Lint suppressions live in `app/lint.xml`, scoped by path or message —
+  deliberately not a baseline file.** A baseline swallows whatever else happens
+  to be failing the day it is regenerated. `lintRelease` should report exactly
+  one warning: `OldTargetApi` on `targetSdk = 36`, kept on purpose as the
+  reminder to bump it for the next release.
