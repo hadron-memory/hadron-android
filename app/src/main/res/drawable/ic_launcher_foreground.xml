@@ -1,0 +1,17 @@
+<!--
+    Adaptive-icon foreground: the round Hadron mark scaled into the 66dp safe
+    zone of the 108dp canvas (21dp inset on every side), so no launcher mask
+    can clip it. Doubles as the monochrome layer — the mark is a single-colour
+    glyph on transparency, which is exactly what themed icons want.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:left="21dp"
+        android:top="21dp"
+        android:right="21dp"
+        android:bottom="21dp">
+        <bitmap
+            android:src="@drawable/hadron_mark"
+            android:gravity="fill" />
+    </item>
+</layer-list>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launch/splash background — hadron-ios' LaunchBackground colorset. -->
+    <color name="launch_background">#FFFFFFFF</color>
+
+    <!-- Adaptive-icon plate. The mark is a black glyph on transparency. -->
+    <color name="ic_launcher_background">#FFFFFFFF</color>
+</resources>

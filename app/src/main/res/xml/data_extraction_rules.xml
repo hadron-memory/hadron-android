@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The bearer token the app stores is a permanent credential sealed with an
+    AndroidKeyStore key that never leaves this device. Excluding the prefs file
+    from cloud backup AND from device-to-device transfer keeps the two in sync:
+    a copy of the ciphertext without its key would only ever fail to decrypt.
+    Mirrors hadron-ios' kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="com.hadronmemory.android.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="com.hadronmemory.android.xml" />
+    </device-transfer>
+</data-extraction-rules>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Pre-API-31 counterpart of data_extraction_rules.xml. allowBackup is already
+    false, so this is belt-and-braces: if backup is ever turned on, the sealed
+    token still must not travel.
+-->
+<full-backup-content>
+    <exclude domain="sharedpref" path="com.hadronmemory.android.xml" />
+</full-backup-content>

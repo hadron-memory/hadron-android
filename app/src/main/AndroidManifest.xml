@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.Hadron"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="false"
+        android:enableOnBackInvokedCallback="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:allowBackup="false">
+
+        <!--
+            singleTask so the OAuth redirect re-enters this instance and, in
+            doing so, clears the Custom Tab off the task stack — the Android
+            equivalent of ASWebAuthenticationSession dismissing its sheet.
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Hadron">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+                The OAuth redirect. The in-app Custom Tab hands most flows
+                straight back, but the email magic link is tapped in the mail
+                app and completes in the system browser — this filter is the
+                only thing that routes that one home.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${oauthRedirectScheme}" />
+            </intent-filter>
+        </activity>
+    </application>
+
+    <!--
+        Custom Tabs / ACTION_VIEW resolution on API 30+ needs the browser
+        declared as a visible package.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+</manifest>

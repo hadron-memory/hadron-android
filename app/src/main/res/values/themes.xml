@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        The Compose UI supplies its own Material 3 colour scheme; this theme
+        only has to hold the window until the first frame, and to declare the
+        splash background the platform paints on API 31+.
+    -->
+    <style name="Theme.Hadron" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/launch_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
