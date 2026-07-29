@@ -16,21 +16,32 @@ plugins {
  * than failing. That keeps `assembleRelease` and `lintRelease` runnable by
  * anyone, which is how the repo has worked from the start.
  */
+val REQUIRED_SIGNING_KEYS = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+
 val releaseSigning: Map<String, String>? = run {
     val file = rootProject.file("keystore.properties")
-    val fromFile = if (file.exists()) {
-        Properties().apply { file.inputStream().use { load(it) } }
+    if (file.exists()) {
+        val props = Properties().apply { file.inputStream().use { load(it) } }
             .entries.associate { (k, v) -> k.toString() to v.toString() }
+        // The file exists, so signing was clearly intended. A missing or blank
+        // value here is a typo, not a choice — fail rather than fall through to
+        // an unsigned artifact that only Play will reject, hours later.
+        val missing = REQUIRED_SIGNING_KEYS.filter { props[it].isNullOrBlank() }
+        require(missing.isEmpty()) {
+            "keystore.properties is present but incomplete — missing or blank: " +
+                "${missing.joinToString()}. Fill it in (see keystore.properties.example), " +
+                "or delete the file to build unsigned."
+        }
+        props
     } else {
-        mapOf(
+        val fromEnv = mapOf(
             "storeFile" to System.getenv("HADRON_KEYSTORE_FILE"),
             "storePassword" to System.getenv("HADRON_KEYSTORE_PASSWORD"),
             "keyAlias" to System.getenv("HADRON_KEY_ALIAS"),
             "keyPassword" to System.getenv("HADRON_KEY_PASSWORD"),
-        ).filterValues { it != null }.mapValues { it.value!! }
+        ).filterValues { !it.isNullOrBlank() }.mapValues { it.value!! }
+        if (REQUIRED_SIGNING_KEYS.all { fromEnv[it] != null }) fromEnv else null
     }
-    val required = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
-    if (required.all { fromFile[it]?.isNotBlank() == true }) fromFile else null
 }
 
 android {

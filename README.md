@@ -49,9 +49,20 @@ Then `cp keystore.properties.example keystore.properties` and fill it in.
 `HADRON_KEYSTORE_FILE`, `HADRON_KEYSTORE_PASSWORD`, `HADRON_KEY_ALIAS` and
 `HADRON_KEY_PASSWORD` instead.
 
-A partially- or wrongly-configured key fails the build at
-`:app:validateSigningRelease` rather than quietly producing an unsigned
-artifact — the failure mode that would otherwise be discovered at upload time.
+**`keyPassword` is the same value as `storePassword`.** Since JDK 9 keytool
+writes PKCS12 keystores by default — even when the file is named `.jks` — and
+PKCS12 has no separate key password. There is no second secret to create.
+
+Two guards, because an unsigned artifact that builds successfully is only
+discovered at upload time:
+
+- `keystore.properties` present but with a missing or blank value fails
+  configuration, naming the offending keys.
+- A `storeFile` that doesn't exist fails at `:app:validateSigningRelease`.
+
+With no `keystore.properties` and no env vars at all, the release build is
+unsigned and succeeds — that's the fresh-clone case, so `assembleRelease` and
+`lintRelease` stay runnable without secrets.
 
 ## Auth
 
